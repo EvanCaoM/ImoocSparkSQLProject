@@ -13,6 +13,7 @@ object DataFrameApp {
 
     // 将json文件加载成一个dataframe
     val peopleDF = spark.read.format("json").load("file:/G:/TestFile/people.json")
+    //val df = spark.read.json("examples/src/main/resources/people.json")
 
     // 输出dataframe对应的schema信息
     peopleDF.printSchema()
@@ -24,10 +25,16 @@ object DataFrameApp {
     peopleDF.select("name").show()
     //查询某几列所有的数据，并对列进行计算：select name,age+10 from table
     peopleDF.select(peopleDF.col("name"),(peopleDF.col("age") + 10)).as("age2").show()
+    //df.select($"name", $"age" + 1).show()
     //根据某一列的值进行过滤：select * from table where
     peopleDF.filter(peopleDF.col("age") > 19).show()
     //根据某一列进行分组，然后再进行聚合操作：select age,count(1) from table group by age
     peopleDF.groupBy("age").count().show()
+//创建全局session级别的临时表
+//    df.createOrReplaceTempView("people")
+//    val sqlDF = spark.sql("SELECT * FROM global_temp.people")
+//    sqlDF.show()
+
 
     spark.stop()
   }
